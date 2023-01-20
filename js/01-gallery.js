@@ -5,11 +5,11 @@ console.log(galleryItems);
 
 const galleryEl = document.querySelector(".gallery")
 
-const imageEl = galleryItems.map(elem => `<a class="gallery__link" href="${elem.original}">
+const imageEl = galleryItems.map(elem => `<a class="gallery__item" href="${elem.original}">
     <img
     class="gallery__image"
-    src="${elem.preview}" 
-    data-source="${elem.original}" 
+    src="${elem.preview}"
+    data-source="${elem.original}"   
     alt="${elem.description}"/>
   </a>`).join("");
 galleryEl.insertAdjacentHTML("beforeend", imageEl);
@@ -24,14 +24,22 @@ function onGalleryClick(evt) {
   const dataEl = evt.target.getAttribute('data-source')
   const modalEl = basicLightbox.create(`
 		<img src="${dataEl}" width="1280">
-	`)
+	`, {
+		onShow: () => document.body.addEventListener ('keydown', closeEsc),
+		onClose: () => document.body.removeEventListener  ('keydown', closeEsc)
+  })
+  
   modalEl.show()
 
-  galleryEl.addEventListener('keydown', evt => {
+  function closeEsc(evt){
   if (evt.key === 'Escape'){
     modalEl.close()
   }
-})
 }
+}
+
+
+
+
 
 
